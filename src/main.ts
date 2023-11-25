@@ -7,7 +7,9 @@ async function bootstrap() {
     origin: [
       'http://localhost:4200',
       'https://rzotr2.github.io/code-jam-ui'
-    ]
+    ],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
   });
   await app.listen(process.env.PORT || 3000); // update this line
 }
