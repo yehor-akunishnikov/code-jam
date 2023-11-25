@@ -10,6 +10,8 @@ export type BookDocument = HydratedDocument<Book>;
 export class Book {
     @Prop({required: true}) name: string;
     @Prop({required: true}) url: string;
+    @Prop() cover?: string;
+    @Prop() description?: string;
     @Prop() id: Types.ObjectId;
 }
 
