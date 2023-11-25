@@ -5,7 +5,7 @@ export class UserController {
     @Get()
     getUser(@Req() req: Request) {
         return [
-            {id: '1', name: 'Joka1', age: 21, data: `${req.url}, ${req.credentials}`},
+            {id: '1', name: 'Joka1', age: 21},
             {id: '2', name: 'Joka2', age: 22},
             {id: '3', name: 'Joka3', age: 23},
             {id: '4', name: 'Joka4', age: 24},
