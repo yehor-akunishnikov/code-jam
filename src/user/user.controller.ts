@@ -1,11 +1,11 @@
-import {Controller, Get} from '@nestjs/common';
+import {Controller, Get, Req} from '@nestjs/common';
 
 @Controller('user')
 export class UserController {
     @Get()
-    getUser() {
+    getUser(@Req() req: Request) {
         return [
-            {id: '1', name: 'Joka1', age: 21},
+            {id: '1', name: 'Joka1', age: 21, data: req},
             {id: '2', name: 'Joka2', age: 22},
             {id: '3', name: 'Joka3', age: 23},
             {id: '4', name: 'Joka4', age: 24},
