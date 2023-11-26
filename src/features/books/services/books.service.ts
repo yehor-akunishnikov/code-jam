@@ -3,9 +3,9 @@ import {Injectable} from '@nestjs/common';
 import {InjectModel} from '@nestjs/mongoose';
 import {Model} from 'mongoose';
 
-import {Book} from '../db/book.schema';
 import {CreateBookDto, UpdateBookDto} from './book.dto';
 import {BookSearchParams} from '../books.controller';
+import {Book} from '../db/book.schema';
 
 @Injectable()
 export class BooksService {
