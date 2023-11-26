@@ -26,10 +26,12 @@ export class BooksService {
         return this.bookModel.findById(id).exec();
     }
 
-    async update(id: string, updateBookDto: UpdateBookDto): Promise<Book> {
-        const updatedBook = this.bookModel.findOneAndReplace(
-            {_id: id},
-            updateBookDto,
+    async update(updateBookDto: UpdateBookDto): Promise<Book> {
+        const {id, ...bookObject} = updateBookDto;
+
+        const updatedBook = this.bookModel.findByIdAndUpdate(
+            id,
+            {...bookObject, _id: id},
             {new: true}
         );
 

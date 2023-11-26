@@ -27,7 +27,7 @@ export class BooksController {
             throw new HttpException('Parameter id should match entity id', HttpStatus.BAD_REQUEST);
         }
 
-        return this.booksService.update(id, updateBookDto);
+        return this.booksService.update(updateBookDto);
     }
 
     @Delete(':id') public remove(@Param('id') id: string): Promise<void> {
