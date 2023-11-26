@@ -8,7 +8,7 @@ export type BookDocument = HydratedDocument<Book>;
     versionKey: false,
 })
 export class Book {
-    @Prop({required: true}) name: string;
+    @Prop({required: true, unique: true}) name: string;
     @Prop({required: true}) url: string;
     @Prop() cover?: string;
     @Prop() description?: string;

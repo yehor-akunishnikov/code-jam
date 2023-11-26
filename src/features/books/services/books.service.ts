@@ -5,6 +5,7 @@ import {Model} from 'mongoose';
 
 import {Book} from '../db/book.schema';
 import {CreateBookDto, UpdateBookDto} from './book.dto';
+import {BookSearchParams} from '../books.controller';
 
 @Injectable()
 export class BooksService {
@@ -18,8 +19,16 @@ export class BooksService {
         return createdBook.save();
     }
 
-    async findAll(): Promise<Book[]> {
-        return this.bookModel.find().exec();
+    async findMany({limit, name}: BookSearchParams): Promise<Book[]> {
+        if (limit) {
+            return this.bookModel.find({
+                name: {$regex: new RegExp(name, 'i')},
+            }).limit(limit).exec();
+        } else {
+            return this.bookModel.find({
+                name: {$regex: new RegExp(name, 'i')},
+            }).exec();
+        }
     }
 
     async findOne(id: string): Promise<Book> {

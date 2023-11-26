@@ -1,8 +1,13 @@
-import {Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put} from '@nestjs/common';
+import {Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Query} from '@nestjs/common';
 
+import {CreateBookDto, UpdateBookDto} from './services/book.dto';
 import {BooksService} from './services/books.service';
 import {Book} from './db/book.schema';
-import {CreateBookDto, UpdateBookDto} from './services/book.dto';
+
+export interface BookSearchParams {
+    limit?: number,
+    name?: string,
+}
 
 @Controller('books')
 export class BooksController {
@@ -10,8 +15,8 @@ export class BooksController {
         private booksService: BooksService,
     ) { }
 
-    @Get() public getAll(): Promise<Book[]> {
-        return this.booksService.findAll();
+    @Get() public getMany(@Query() query: BookSearchParams = {name: ''}): Promise<Book[]> {
+        return this.booksService.findMany(query);
     }
 
     @Get(':id') public getOne(@Param('id') id: string): Promise<Book> {

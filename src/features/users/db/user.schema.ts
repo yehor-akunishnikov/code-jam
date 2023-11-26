@@ -8,7 +8,7 @@ export type UserDocument = HydratedDocument<User>;
     versionKey: false,
 })
 export class User {
-    @Prop({required: true}) name: string;
+    @Prop({required: true, unique: true}) name: string;
     @Prop({required: true}) password: string;
     @Prop() id: Types.ObjectId;
 }
