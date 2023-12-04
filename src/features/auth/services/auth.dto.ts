@@ -1,4 +1,4 @@
-import {IsNotEmpty, IsString, IsStrongPassword} from 'class-validator';
+import {IsNotEmpty, IsString, IsStrongPassword, MaxLength, MinLength, NotContains} from 'class-validator';
 
 export class SignInDto {
     @IsNotEmpty() @IsString() password: string;
@@ -6,6 +6,6 @@ export class SignInDto {
 }
 
 export class RegisterDto {
-    @IsNotEmpty() @IsString() name: string;
-    @IsNotEmpty() @IsStrongPassword() password: string;
+    @IsNotEmpty() @IsString() @MaxLength(15) @MinLength(3) @NotContains(" ") name: string;
+    @IsNotEmpty() @IsString() @IsStrongPassword() @NotContains(" ") password: string;
 }
