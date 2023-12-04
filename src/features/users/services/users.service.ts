@@ -2,7 +2,7 @@ import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {InjectModel} from '@nestjs/mongoose';
 
 import * as bcrypt from 'bcrypt';
-import {Model} from 'mongoose';
+import {FilterQuery, Model} from 'mongoose';
 
 import {User} from '../db/user.schema';
 import {UserSearchParams} from '../users.controller';
@@ -36,22 +36,44 @@ export class UsersService {
     }
 
     async findMany({limit, name}: UserSearchParams): Promise<User[]> {
+        const filter: FilterQuery<User> = this.buildSearchFilter(['name', name]);
+
         if (limit) {
-            return this.userModel.find({
-                name: {$regex: new RegExp(name, 'i')},
-            }).limit(limit).exec();
+            return this.userModel.find(filter).limit(limit).exec();
         } else {
-            return this.userModel.find({
-                name: {$regex: new RegExp(name, 'i')},
-            }).exec();
+            return this.userModel.find(filter).exec();
         }
     }
 
     async findOne(id: string): Promise<User> {
-        return this.userModel.findById(id).exec();
+        const user = await this.userModel.findById(id).exec();
+
+        return this.handleNotFound(user);
     }
 
     async findByName(name: string): Promise<User> {
-        return this.userModel.findOne({name}).exec();
+        const user = await this.userModel.findOne({name}).exec();
+
+        return this.handleNotFound(user);
+    }
+
+    private handleNotFound(user: User): User {
+        if (user) {
+            return user;
+        } else {
+            throw new HttpException('User not found', HttpStatus.NOT_FOUND)
+        }
+    }
+
+    private buildSearchFilter(...queryParams: [string, string][]): FilterQuery<User> {
+        const filter: FilterQuery<User> = {};
+
+        queryParams.forEach(param => {
+            if (param[1]) {
+                filter[param[0]] = {$regex: new RegExp(param[1], 'i')};
+            }
+        });
+
+        return filter;
     }
 }

@@ -18,7 +18,7 @@ export class UsersController {
         return this.usersService.findMany(query);
     }
 
-    @Get(':id') public getOne(@Param('id') id: string): Promise<User> {
-        return this.usersService.findOne(id);
+    @Get(':name') public async getOneByName(@Param('name') name: string): Promise<User> {
+        return this.usersService.findByName(name);
     }
 }

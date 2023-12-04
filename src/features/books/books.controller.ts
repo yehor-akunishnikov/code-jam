@@ -21,6 +21,7 @@ import {RequestWithAuthPayload} from '../../models';
 export interface BookSearchParams {
     limit?: number,
     name?: string,
+    creator?: string,
 }
 
 @Controller('books')
@@ -29,12 +30,12 @@ export class BooksController {
         private booksService: BooksService,
     ) { }
 
-    @Get() public getMany(@Query() query: BookSearchParams = {name: ''}): Promise<Book[]> {
+    @Get() public getMany(@Query() query: BookSearchParams = {name: '', creator: ''}): Promise<Book[]> {
         return this.booksService.findMany(query);
     }
 
-    @Get(':id') public getOne(@Param('id') id: string): Promise<Book> {
-        return this.booksService.findOne(id);
+    @Get(':name') public async getOneByName(@Param('name') name: string): Promise<Book> {
+        return this.booksService.findOneByName(name);
     }
 
     @UseGuards(AuthGuard)
