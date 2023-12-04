@@ -1,16 +1,17 @@
-import {IsMongoId, IsNotEmpty, IsOptional, IsUrl} from 'class-validator';
+import {IsMongoId, IsNotEmpty, IsOptional, IsString, IsUrl} from 'class-validator';
 
 export class CreateBookDto {
-    @IsNotEmpty() name: string;
+    @IsNotEmpty() @IsString() name: string;
     @IsNotEmpty() @IsUrl() url: string;
     @IsOptional() @IsNotEmpty() @IsUrl() cover?: string;
-    @IsOptional() @IsNotEmpty() description?: string;
+    @IsOptional() @IsString() @IsNotEmpty() description?: string;
 }
 
 export class UpdateBookDto {
-    @IsNotEmpty() name: string;
+    @IsNotEmpty() @IsString() name: string;
     @IsNotEmpty() @IsUrl() url: string;
     @IsOptional() @IsNotEmpty() @IsUrl() cover?: string;
-    @IsOptional() @IsNotEmpty() description?: string;
+    @IsOptional() @IsString() @IsNotEmpty() description?: string;
     @IsMongoId() @IsNotEmpty() id: string;
+    @IsNotEmpty() @IsString() creator: string;
 }

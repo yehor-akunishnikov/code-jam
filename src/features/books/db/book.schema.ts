@@ -13,6 +13,7 @@ export class Book {
     @Prop() cover?: string;
     @Prop() description?: string;
     @Prop() id: Types.ObjectId;
+    @Prop({required: true}) creator: string;
 }
 
 export const BookSchema = SchemaFactory.createForClass(Book);

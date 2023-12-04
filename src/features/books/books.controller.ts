@@ -8,7 +8,7 @@ import {
     Param,
     Post,
     Put,
-    Query,
+    Query, Req,
     UseGuards
 } from '@nestjs/common';
 
@@ -16,6 +16,7 @@ import {CreateBookDto, UpdateBookDto} from './services/book.dto';
 import {BooksService} from './services/books.service';
 import {AuthGuard} from '../auth/guard/auth.guard';
 import {Book} from './db/book.schema';
+import {RequestWithAuthPayload} from '../../models';
 
 export interface BookSearchParams {
     limit?: number,
@@ -37,21 +38,31 @@ export class BooksController {
     }
 
     @UseGuards(AuthGuard)
-    @Post() public create(@Body() createBookDto: CreateBookDto): Promise<Book> {
-        return this.booksService.create(createBookDto);
+    @Post() public create(
+        @Body() createBookDto: CreateBookDto,
+        @Req() request: RequestWithAuthPayload
+    ): Promise<Book> {
+        return this.booksService.create(createBookDto, request.user.username);
     }
 
     @UseGuards(AuthGuard)
-    @Put(':id') public update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto): Promise<Book> {
+    @Put(':id') public update(
+        @Param('id') id: string,
+        @Body() updateBookDto: UpdateBookDto,
+        @Req() request: RequestWithAuthPayload
+    ): Promise<Book> {
         if (id !== updateBookDto.id) {
             throw new HttpException('Parameter id should match entity id', HttpStatus.BAD_REQUEST);
         }
 
-        return this.booksService.update(updateBookDto);
+        return this.booksService.update(updateBookDto, request.user.username);
     }
 
     @UseGuards(AuthGuard)
-    @Delete(':id') public remove(@Param('id') id: string): Promise<void> {
-        return this.booksService.remove(id);
+    @Delete(':id') public remove(
+        @Param('id') id: string,
+        @Req() request: RequestWithAuthPayload
+    ): Promise<void> {
+        return this.booksService.remove(id, request.user.username);
     }
 }

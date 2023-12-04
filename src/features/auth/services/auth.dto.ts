@@ -1,11 +1,11 @@
-import {IsNotEmpty, IsStrongPassword} from 'class-validator';
+import {IsNotEmpty, IsString, IsStrongPassword} from 'class-validator';
 
 export class SignInDto {
-    @IsNotEmpty() password: string;
-    @IsNotEmpty() name: string;
+    @IsNotEmpty() @IsString() password: string;
+    @IsNotEmpty() @IsString() name: string;
 }
 
 export class RegisterDto {
-    @IsNotEmpty() name: string;
+    @IsNotEmpty() @IsString() name: string;
     @IsNotEmpty() @IsStrongPassword() password: string;
 }
