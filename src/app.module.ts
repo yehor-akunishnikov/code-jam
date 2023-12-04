@@ -11,6 +11,7 @@ import {AppController} from './app.controller';
 import {AppService} from './app.service';
 import {UsersModule} from './features/users/users.module';
 import {BooksModule} from './features/books/books.module';
+import {JwtModule} from '@nestjs/jwt';
 
 @Module({
     imports: [
@@ -20,6 +21,11 @@ import {BooksModule} from './features/books/books.module';
             ttl: 60000,
             limit: 10,
         }]),
+        JwtModule.register({
+            global: true,
+            secret: process.env.JWT_KEY,
+            signOptions: { expiresIn: '10m' },
+        }),
         BooksModule,
         UsersModule,
     ],

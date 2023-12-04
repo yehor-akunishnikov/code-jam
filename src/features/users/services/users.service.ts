@@ -5,8 +5,8 @@ import * as bcrypt from 'bcrypt';
 import {Model} from 'mongoose';
 
 import {User} from '../db/user.schema';
-import {CreateUserDto} from './user.dto';
 import {UserSearchParams} from '../users.controller';
+import {RegisterDto} from '../../auth/services/auth.dto';
 
 @Injectable()
 export class UsersService {
@@ -15,13 +15,13 @@ export class UsersService {
     ) {
     }
 
-    async create(createUserDto: CreateUserDto): Promise<User> {
-        const password = await bcrypt.hash(createUserDto.password, 10);
+    async create(registerDto: RegisterDto): Promise<User> {
+        const password = await bcrypt.hash(registerDto.password, 10);
         let user: User = null;
 
         try {
             user = await new this.userModel({
-                ...createUserDto,
+                ...registerDto,
                 password,
             }).save();
         } catch (e) {
@@ -49,5 +49,9 @@ export class UsersService {
 
     async findOne(id: string): Promise<User> {
         return this.userModel.findById(id).exec();
+    }
+
+    async findByName(name: string): Promise<User> {
+        return this.userModel.findOne({name}).exec();
     }
 }
