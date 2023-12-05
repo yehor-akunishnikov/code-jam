@@ -1,4 +1,4 @@
-import {IsMongoId, IsNotEmpty, IsOptional, IsString, IsUrl, NotContains} from 'class-validator';
+import {IsArray, IsBoolean, IsMongoId, IsNotEmpty, IsOptional, IsString, IsUrl, NotContains} from 'class-validator';
 
 export class CreateBookDto {
     @IsNotEmpty() @IsString() @NotContains(" ") name: string;
@@ -12,6 +12,11 @@ export class UpdateBookDto {
     @IsNotEmpty() @IsUrl() url: string;
     @IsOptional() @IsNotEmpty() @IsUrl() cover?: string;
     @IsOptional() @IsString() @IsNotEmpty() description?: string;
-    @IsMongoId() @IsNotEmpty() id: string;
-    @IsNotEmpty() @IsString() creator: string;
+    @IsOptional() @IsMongoId() @IsNotEmpty() id: string;
+    @IsOptional() @IsNotEmpty() @IsString() creator: string;
+    @IsOptional() @IsArray() likedBy: string[];
+}
+
+export class LikeBookDto {
+    @IsBoolean() @IsNotEmpty() like: boolean;
 }

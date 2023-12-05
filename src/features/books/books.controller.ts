@@ -1,7 +1,7 @@
 import {Body, Controller, DefaultValuePipe, Delete, Get} from '@nestjs/common';
 import {Param, Post, Put, Query, Req, UseGuards} from '@nestjs/common';
 
-import {CreateBookDto, UpdateBookDto} from './services/book.dto';
+import {CreateBookDto, LikeBookDto, UpdateBookDto} from './services/book.dto';
 import {RequestWithAuthPayload} from '../../common/models';
 import {BooksService} from './services/books.service';
 import {AuthGuard} from '../auth/guard/auth.guard';
@@ -47,6 +47,14 @@ export class BooksController {
         @Req() request: RequestWithAuthPayload
     ): Promise<Book> {
         return this.booksService.update(updateBookDto, request.user.username, id);
+    }
+
+    @UseGuards(AuthGuard) @Put('like/:id') public like(
+        @Param('id') id: string,
+        @Body() likeBookDto: LikeBookDto,
+        @Req() request: RequestWithAuthPayload
+    ): Promise<Book> {
+        return this.booksService.like(likeBookDto, request.user.username, id);
     }
 
     @UseGuards(AuthGuard) @Delete(':id') public remove(

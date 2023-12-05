@@ -4,7 +4,7 @@ import {InjectModel} from '@nestjs/mongoose';
 import {FilterQuery, Model} from 'mongoose';
 
 import {SearchUtilsService} from '../../../shared/services/search-utils.service';
-import {CreateBookDto, UpdateBookDto} from './book.dto';
+import {CreateBookDto, LikeBookDto, UpdateBookDto} from './book.dto';
 import {BookSearchParams} from '../books.controller';
 import {Book} from '../db/book.schema';
 
@@ -51,7 +51,7 @@ export class BooksService {
     }
 
     async update(updateBookDto: UpdateBookDto, currentUserName: string, idParam: string): Promise<Book> {
-        const {id, ...bookObject} = updateBookDto;
+        const {id, creator, likedBy, ...bookObject} = updateBookDto;
         const book = await this.findOne(id);
 
         if (idParam !== id) {
@@ -62,13 +62,9 @@ export class BooksService {
             throw new HttpException('Only the book creator can edit a book', HttpStatus.UNAUTHORIZED);
         }
 
-        if (updateBookDto.creator !== currentUserName) {
-            throw new HttpException('Book creator reassignment is forbidden', HttpStatus.FORBIDDEN);
-        }
-
         return this.bookModel.findByIdAndUpdate(
             id,
-            {...bookObject, _id: id},
+            bookObject,
             {new: true}
         );
     }
@@ -83,5 +79,23 @@ export class BooksService {
         await this.bookModel.findByIdAndDelete(id).exec();
 
         return;
+    }
+
+    async like(likeBookDto: LikeBookDto, userName: string, id: string): Promise<Book> {
+        const book = await this.findOne(id);
+
+        if (likeBookDto.like) {
+            return this.bookModel.findByIdAndUpdate(
+                id,
+                {likedBy: [...book.likedBy, userName]},
+                {new: true}
+            );
+        } else {
+            return this.bookModel.findByIdAndUpdate(
+                id,
+                {likedBy: book.likedBy.filter(name => name !== userName)},
+                {new: true}
+            );
+        }
     }
 }
