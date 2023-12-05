@@ -28,6 +28,15 @@ export class BooksController {
         return this.booksService.findMany({name, creator, limit});
     }
 
+    @UseGuards(AuthGuard) @Get('liked') public getLiked(
+        @Query('name', new DefaultValuePipe(null)) name: string,
+        @Query('creator', new DefaultValuePipe(null)) creator: string,
+        @Query('limit', new DefaultValuePipe(null)) limit: number,
+        @Req() request: RequestWithAuthPayload
+    ): Promise<Book[]> {
+        return this.booksService.findLiked({name, creator, limit}, request.user.username);
+    }
+
     @Get(':name') public async getOneByName(
         @Param('name') name: string
     ): Promise<Book> {

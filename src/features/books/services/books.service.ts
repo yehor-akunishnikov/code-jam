@@ -36,6 +36,20 @@ export class BooksService {
         }
     }
 
+    async findLiked({limit, name, creator}: BookSearchParams, username: string): Promise<Book[]> {
+        const filter: FilterQuery<Book> = this.searchUtilsService.buildSearchFilter<Book>(
+            {key: 'name', value: name},
+            {key: 'creator', value: creator},
+            {key: 'likedBy', value: username}
+        );
+
+        if (limit) {
+            return this.bookModel.find(filter).limit(limit).exec();
+        } else {
+            return this.bookModel.find(filter).exec();
+        }
+    }
+
     async findOne(id: string): Promise<Book> {
         return this.searchUtilsService.handleNotFound<Book>(
             await this.bookModel.findById(id).exec(),
