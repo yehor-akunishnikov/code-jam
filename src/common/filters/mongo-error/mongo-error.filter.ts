@@ -6,7 +6,6 @@ import * as mongoose from 'mongoose';
 @Catch(mongoose.mongo.MongoServerError)
 export class MongoErrorFilter implements RpcExceptionFilter {
     catch(exception: MongoServerError, host: ArgumentsHost) : any {
-        console.log(exception);
         const ctx = host.switchToHttp(),
             response = ctx.getResponse();
 
