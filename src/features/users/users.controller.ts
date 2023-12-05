@@ -1,4 +1,4 @@
-import {Controller, Get, Param, Query} from '@nestjs/common';
+import {Controller, DefaultValuePipe, Get, Param, Query} from '@nestjs/common';
 
 import {User} from './db/user.schema';
 import {UsersService} from './services/users.service';
@@ -14,11 +14,16 @@ export class UsersController {
         private usersService: UsersService,
     ) { }
 
-    @Get() public getMany(@Query() query: UserSearchParams = {name: ''}): Promise<User[]> {
-        return this.usersService.findMany(query);
+    @Get() public getMany(
+        @Query('name', new DefaultValuePipe(null)) name: string,
+        @Query('limit', new DefaultValuePipe(null)) limit: number,
+    ): Promise<User[]> {
+        return this.usersService.findMany({name, limit});
     }
 
-    @Get(':name') public async getOneByName(@Param('name') name: string): Promise<User> {
+    @Get(':name') public async getOneByName(
+        @Param('name') name: string
+    ): Promise<User> {
         return this.usersService.findByName(name);
     }
 }

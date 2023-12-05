@@ -17,7 +17,7 @@ export class AuthService {
         const user = await this.usersService.findByName(name);
 
         if(!user) {
-            throw new NotFoundException('User not found')
+            throw new NotFoundException('User not found');
         }
 
         const isPassMatching = await bcrypt.compare(pass, user.password);
@@ -27,7 +27,7 @@ export class AuthService {
         }
 
         const payload = {sub: user.id, username: user.name};
-        const token = await this.jwtService.signAsync(payload)
+        const token = await this.jwtService.signAsync(payload);
 
         return {token};
     }

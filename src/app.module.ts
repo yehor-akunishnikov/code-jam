@@ -4,14 +4,12 @@ import {APP_GUARD} from '@nestjs/core';
 import {ThrottlerGuard, ThrottlerModule} from '@nestjs/throttler';
 import {MongooseModule} from '@nestjs/mongoose';
 import {ConfigModule} from '@nestjs/config';
+import {JwtModule} from '@nestjs/jwt';
 
 import * as process from 'process';
 
-import {AppController} from './app.controller';
-import {AppService} from './app.service';
 import {UsersModule} from './features/users/users.module';
 import {BooksModule} from './features/books/books.module';
-import {JwtModule} from '@nestjs/jwt';
 
 @Module({
     imports: [
@@ -29,14 +27,12 @@ import {JwtModule} from '@nestjs/jwt';
         BooksModule,
         UsersModule,
     ],
-    controllers: [AppController],
     providers: [
         {
             provide: APP_GUARD,
             useClass: ThrottlerGuard
         },
-        AppService
-    ],
+    ]
 })
 export class AppModule {
 }

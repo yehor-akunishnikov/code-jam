@@ -6,13 +6,15 @@ import {BooksController} from './books.controller';
 import {Book, BookSchema} from './db/book.schema';
 import {BooksService} from './services/books.service';
 import {AuthModule} from '../auth/auth.module';
+import {SharedModule} from '../../shared/shared.module';
 
 @Module({
     imports: [
         MongooseModule.forFeature([
             {name: Book.name, schema: BookSchema}
         ]),
-        AuthModule
+        AuthModule,
+        SharedModule
     ],
     providers: [BooksService],
     controllers: [BooksController],
