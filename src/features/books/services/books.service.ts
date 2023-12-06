@@ -73,7 +73,7 @@ export class BooksService {
         }
 
         if (book.creator !== currentUserName) {
-            throw new HttpException('Only the book creator can edit a book', HttpStatus.UNAUTHORIZED);
+            throw new HttpException('Only the book creator can edit a book', HttpStatus.FORBIDDEN);
         }
 
         return this.bookModel.findByIdAndUpdate(
@@ -87,7 +87,7 @@ export class BooksService {
         const book = this.searchUtilsService.handleNotFound<Book>(await this.findOne(id), 'book');
 
         if (book.creator !== currentUserName) {
-            throw new HttpException('Only the book creator can edit a book', HttpStatus.UNAUTHORIZED);
+            throw new HttpException('Only the book creator can edit a book', HttpStatus.FORBIDDEN);
         }
 
         await this.bookModel.findByIdAndDelete(id).exec();
